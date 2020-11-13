@@ -45,6 +45,12 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         } finally {
             File("temp.txt").delete()
         }
+        try {
+            sortTimes("input/time_in4.txt", "temp.txt")
+            assertFileContent("temp.txt", File("input/time_out4.txt").readLines())
+        } finally {
+            File("temp.txt").delete()
+        }
     }
 
     protected fun sortAddresses(sortAddresses: (String, String) -> Unit) {
@@ -56,6 +62,22 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                     Железнодорожная 3 - Петров Иван
                     Железнодорожная 7 - Иванов Алексей, Иванов Михаил
                     Садовая 5 - Сидоров Петр, Сидорова Мария
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            sortAddresses("input/addr_in4.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    Железнодорожная 3 - Петров Иван
+                    Железнодорожная 7 - Иванов Алексей
+                    Железнодорожная 31 - Петров Петр
+                    Железнодорожная 71 - Иванов Алексей, Иванов Михаил
+                    Садовая 5 - Сидоров Петр, Сидорова Мария
+                    Садовая 51 - Сидоров Алексей
                 """.trimIndent()
             )
         } finally {
@@ -113,6 +135,25 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                     24.7
                     99.5
                     121.3
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+
+        try {
+            sortTemperatures("input/temp_in2.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """               
+                -212.6
+                -198.4
+                -132.6
+                0.0
+                121.0
+                121.3
+                224.7
+                299.5
                 """.trimIndent()
             )
         } finally {
