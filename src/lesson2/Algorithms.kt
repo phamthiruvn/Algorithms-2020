@@ -2,6 +2,9 @@
 
 package lesson2
 
+import java.lang.Math.sqrt
+import kotlin.math.max
+
 /**
  * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
  * Простая
@@ -79,8 +82,16 @@ fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
  * Общий комментарий: решение из Википедии для этой задачи принимается,
  * но приветствуется попытка решить её самостоятельно.
  */
+
+//Трудоемкость алгоритм - O(N)
+//Ресурсоемкость - O(1)
+
 fun josephTask(menNumber: Int, choiceInterval: Int): Int {
-    TODO()
+    var safe = 1
+    for (i in 2..menNumber) {
+        safe = (choiceInterval + safe - 1) % i + 1
+    }
+    return safe
 }
 
 /**
@@ -94,8 +105,28 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
  */
+
+//Трудоемкость алгоритм - O(M*N)
+//Ресурсоемкость - O(N*M)
+
 fun longestCommonSubstring(first: String, second: String): String {
-    TODO()
+    var maxL = 0
+    var maxI = 0
+    var mid = first
+    val values = Array(first.length) { IntArray(second.length) }
+    for (i in first.indices) {
+        for (j in second.indices) {
+            if (first[i] == second[j]) {
+                values[i][j] = if (i * j == 0) 1 else 1 + values[i - 1][j - 1]
+                if (values[i][j] > maxL) {
+                    maxL = values[i][j]
+                    maxI = max(i, j)
+                    if (maxI == j) mid = second
+                }
+            }
+        }
+    }
+    return mid.substring(maxI - maxL + 1, maxI + 1)
 }
 
 /**
@@ -109,5 +140,11 @@ fun longestCommonSubstring(first: String, second: String): String {
  * Единица простым числом не считается.
  */
 fun calcPrimesNumber(limit: Int): Int {
-    TODO()
+    if (limit <= 1) return 0
+    val numbers = BooleanArray(limit + 1) { true }
+    for (i in 2..sqrt(limit.toDouble()).toInt()) {
+        if (numbers[i])
+            for (j in 2..(limit / i)) numbers[i * j] = false
+    }
+    return numbers.count { it } - 2
 }
