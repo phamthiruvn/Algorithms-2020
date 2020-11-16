@@ -7,7 +7,7 @@ import kotlin.math.max
 class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), CheckableSortedSet<T> {
 
     private class Node<T>(
-        val value: T
+        var value: T
     ) {
         var left: Node<T>? = null
         var right: Node<T>? = null
@@ -67,6 +67,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         return true
     }
 
+
     /**
      * Удаление элемента из дерева
      *
@@ -79,8 +80,45 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
      *
      * Средняя
      */
+    // трудоёмкость: O(N)
+    // ресурсоёмкость: O(1)
+
     override fun remove(element: T): Boolean {
-        TODO()
+        val node = find(element)
+        return if (node != null && node.value == element) {
+            root = deleteNode(root, element)
+            size--
+            true
+        } else false
+    }
+
+    private fun deleteNode(node: Node<T>?, element: T): Node<T>? {
+        var root: Node<T>? = node
+        if (root == null) return root
+        if (element > root.value) root.right = deleteNode(root.right, element)
+        else if (element < root.value) root.left = deleteNode(root.left, element)
+        else {
+            if (root.left != null && root.right != null) {
+                root.value = successor(root)
+                root.right = deleteNode(root.right, root.value)
+            } else {
+                root = when {
+                    root.left != null -> root.left
+                    root.right != null -> root.right
+                    else -> null
+                }
+            }
+        }
+        return root
+    }
+
+    private fun successor(root: Node<T>): T {
+        var root: Node<T> = root
+        root = root.right!!
+        while (root.left != null) {
+            root = root.left!!
+        }
+        return root.value
     }
 
     override fun comparator(): Comparator<in T>? =
@@ -90,6 +128,17 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         BinarySearchTreeIterator()
 
     inner class BinarySearchTreeIterator internal constructor() : MutableIterator<T> {
+
+        private var current: Node<T>? = null
+        private val stack = Stack<Node<T>>()
+
+        init {
+            current = root
+            while (current != null) {
+                stack.push(current)
+                current = current!!.left
+            }
+        }
 
         /**
          * Проверка наличия следующего элемента
@@ -101,10 +150,9 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
-        override fun hasNext(): Boolean {
-            // TODO
-            throw NotImplementedError()
-        }
+        //Время O(1)
+        //Память O(1)
+        override fun hasNext(): Boolean = stack.isNotEmpty()
 
         /**
          * Получение следующего элемента
@@ -119,9 +167,26 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
+        //Время O(N)
+        //Память O(1)
         override fun next(): T {
-            // TODO
-            throw NotImplementedError()
+            if (stack.isNotEmpty()) {
+                var node = stack.pop()
+                current = node
+                if (node.right != null) {
+                    node = node.right
+                    pushAll(node)
+                }
+                return current!!.value
+            } else throw NoSuchElementException()
+        }
+
+        private fun pushAll(node: Node<T>) {
+            if (node != null) {
+                stack.push(node)
+                if (node.left != null)
+                    pushAll(node.left!!)
+            }
         }
 
         /**
@@ -136,11 +201,13 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Сложная
          */
+        //Время O(N)
+        //Память O(1)
         override fun remove() {
-            // TODO
-            throw NotImplementedError()
+            if (current == null) throw IllegalStateException()
+            remove(current!!.value)
+            current = null
         }
-
     }
 
     /**
