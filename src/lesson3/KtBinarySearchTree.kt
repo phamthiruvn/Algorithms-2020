@@ -170,15 +170,14 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         //Время O(N)
         //Память O(1)
         override fun next(): T {
-            if (stack.isNotEmpty()) {
-                var node = stack.pop()
-                current = node
-                if (node.right != null) {
-                    node = node.right
-                    pushAll(node)
-                }
-                return current!!.value
-            } else throw NoSuchElementException()
+            if (stack.isEmpty()) throw NoSuchElementException()
+            var node = stack.pop()
+            current = node
+            if (node.right != null) {
+                node = node.right
+                pushAll(node)
+            }
+            return current!!.value
         }
 
         private fun pushAll(node: Node<T>) {
