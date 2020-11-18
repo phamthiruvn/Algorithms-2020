@@ -83,17 +83,16 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             findNext()
         }
 
-        private fun findNext(): Unit? {
+        private fun findNext() {
             next = null
             var iterator = q.peek()
-            while (iterator != null) {
-                while (iterator.hasNext()) {
+            var isWord = false
+            while (iterator != null && !isWord) {
+                while (iterator.hasNext() && !isWord) {
                     val e = iterator.next()
                     val key = e.key
-                    if (key == 0.toChar()) {
-                        next = sb.toString()
-                        return null
-                    }
+                    isWord = key == 0.toChar()
+                    if (isWord) next = sb.toString()
                     sb.append(key)
                     val node = e.value
                     iterator = node.children.entries.iterator()
@@ -103,7 +102,6 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
                 if (sb.isNotEmpty()) sb.deleteCharAt(sb.length - 1)
                 iterator = q.peek()
             }
-            return null
         }
 
 
