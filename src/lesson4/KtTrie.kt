@@ -1,5 +1,8 @@
 package lesson4
 
+import java.util.*
+
+
 /**
  * Префиксное дерево для строк
  */
@@ -68,8 +71,54 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      *
      * Сложная
      */
-    override fun iterator(): MutableIterator<String> {
-        TODO()
-    }
+    override fun iterator() = TrieIterator()
 
+    inner class TrieIterator internal constructor() : MutableIterator<String> {
+        private var next: String? = null
+        private val sb = StringBuilder()
+        private val q: Deque<Iterator<Map.Entry<Char, Node>>> = ArrayDeque()
+
+        init {
+            q.push(root.children.entries.iterator())
+            findNext()
+        }
+
+        private fun findNext(): Unit? {
+            next = null
+            var iterator = q.peek()
+            while (iterator != null) {
+                while (iterator.hasNext()) {
+                    val e = iterator.next()
+                    val key = e.key
+                    if (key == 0.toChar()) {
+                        next = sb.toString()
+                        return null
+                    }
+                    sb.append(key)
+                    val node = e.value
+                    iterator = node.children.entries.iterator()
+                    q.push(iterator)
+                }
+                q.pop()
+                if (sb.isNotEmpty()) sb.deleteCharAt(sb.length - 1)
+                iterator = q.peek()
+            }
+            return null
+        }
+
+
+        override fun hasNext() = next != null
+
+        override fun next(): String {
+            if (!hasNext()) throw IllegalStateException()
+            val result = next!!
+            findNext()
+            return result
+        }
+
+        override fun remove() {
+            next = null
+            size--
+        }
+    }
 }

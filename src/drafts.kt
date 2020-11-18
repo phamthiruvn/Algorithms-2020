@@ -1,7 +1,15 @@
-import lesson1.sortTimes
+import lesson3.KtBinarySearchTree
 
 fun main() {
 
 
-    sortTimes("input/time_in4.txt", "input/time_out4.txt")
+    val new = KtBinarySearchTree<Int>()
+    new.add(1)
+    new.add(2)
+    new.add(3)
+    new.add(4)
+    new.add(5)
+    new.add(6)
+    val check = new
+    println(check.add(5))
 }

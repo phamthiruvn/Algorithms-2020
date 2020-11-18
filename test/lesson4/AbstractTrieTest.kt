@@ -1,9 +1,12 @@
 package lesson4
 
+import ru.spbstu.kotlin.generate.util.nextString
 import java.util.*
 import kotlin.math.abs
-import ru.spbstu.kotlin.generate.util.nextString
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 abstract class AbstractTrieTest {
 

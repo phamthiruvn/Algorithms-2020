@@ -1,11 +1,12 @@
 package lesson3
 
+import org.junit.jupiter.api.assertDoesNotThrow
 import java.util.*
 import kotlin.math.abs
-import kotlin.test.*
-import org.junit.jupiter.api.assertDoesNotThrow
-import kotlin.IllegalStateException
-import kotlin.NoSuchElementException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 abstract class AbstractBinarySearchTreeTest {
 
@@ -200,7 +201,7 @@ abstract class AbstractBinarySearchTreeTest {
                     "BinarySearchTreeIterator doesn't traverse the tree correctly."
                 )
             }
-            assertFailsWith<IllegalStateException>("Something was supposedly returned after the elements ended") {
+            assertFailsWith<NoSuchElementException>("Something was supposedly returned after the elements ended") {
                 binaryIter.next()
             }
             println("All clear!")
@@ -272,6 +273,7 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+
     }
 
     protected fun doSubSetTest() {

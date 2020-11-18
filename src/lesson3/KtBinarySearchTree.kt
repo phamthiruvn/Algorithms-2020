@@ -80,8 +80,8 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
      *
      * Средняя
      */
-    // трудоёмкость: O(N)
-    // ресурсоёмкость: O(1)
+//Трудоемкость алгоритм - O(N)
+//Ресурсоемкость - O(1)
 
     override fun remove(element: T): Boolean {
         val node = find(element)
@@ -113,12 +113,12 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
     }
 
     private fun successor(root: Node<T>): T {
-        var root: Node<T> = root
-        root = root.right!!
-        while (root.left != null) {
-            root = root.left!!
+        var node: Node<T> = root
+        node = node.right!!
+        while (node.left != null) {
+            node = node.left!!
         }
-        return root.value
+        return node.value
     }
 
     override fun comparator(): Comparator<in T>? =
@@ -150,8 +150,10 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
-        //Время O(1)
-        //Память O(1)
+
+//Трудоемкость алгоритм - O(1)
+//Ресурсоемкость - O(1)
+
         override fun hasNext(): Boolean = stack.isNotEmpty()
 
         /**
@@ -167,10 +169,12 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
-        //Время O(N)
-        //Память O(1)
+
+//Трудоемкость алгоритм - O(1)
+//Ресурсоемкость - O(1)
+
         override fun next(): T {
-            if (stack.isEmpty()) throw NoSuchElementException()
+            if (!hasNext()) throw NoSuchElementException()
             var node = stack.pop()
             current = node
             if (node.right != null) {
@@ -181,11 +185,9 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         }
 
         private fun pushAll(node: Node<T>) {
-            if (node != null) {
-                stack.push(node)
-                if (node.left != null)
-                    pushAll(node.left!!)
-            }
+            stack.push(node)
+            if (node.left != null)
+                pushAll(node.left!!)
         }
 
         /**
@@ -200,8 +202,10 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Сложная
          */
-        //Время O(N)
-        //Память O(1)
+
+//Трудоемкость алгоритм - O(N)
+//Ресурсоемкость - O(1)
+
         override fun remove() {
             if (current == null) throw IllegalStateException()
             remove(current!!.value)
