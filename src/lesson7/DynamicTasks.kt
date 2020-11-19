@@ -56,6 +56,7 @@ fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
     val max = Array(list.size) { 0 }
     val trace = Array(list.size) { 0 }
     val result = mutableListOf<Int>()
+    var maxLength = 0
     for (i in list.indices) {
         max[i] = 1
         trace[i] = -1
@@ -65,8 +66,9 @@ fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
                 trace[i] = j
             }
         }
+        if (max[i] > maxLength) maxLength = max[i]
     }
-    var maxIndex = max.indexOfFirst { it == max.toList().maxOrNull() }
+    var maxIndex = max.indexOfFirst { it == maxLength }
     while (maxIndex != -1) {
         result.add(0, list[maxIndex])
         maxIndex = trace[maxIndex]
