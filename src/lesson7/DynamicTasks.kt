@@ -2,6 +2,7 @@
 
 package lesson7
 
+
 /**
  * Наибольшая общая подпоследовательность.
  * Средняя
@@ -15,7 +16,27 @@ package lesson7
  * При сравнении подстрок, регистр символов *имеет* значение.
  */
 fun longestCommonSubSequence(first: String, second: String): String {
-    TODO()
+    var m = first.length
+    var n = second.length
+    val sb = StringBuilder()
+    val values = Array(m + 1) { IntArray(n + 1) }
+    for (i in 0..m) {
+        for (j in 0..n) {
+            values[i][j] = if (i == 0 || j == 0) 0
+            else if (first[i - 1] == second[j - 1]) values[i - 1][j - 1] + 1
+            else maxOf(values[i][j - 1], values[i - 1][j])
+        }
+    }
+    while (m > 0 && n > 0) {
+        when {
+            first[m - 1] == second[n - 1] -> sb.append(first[m - 1])
+            values[m - 1][n] > values[m][n - 1] -> n++
+            else -> m++
+        }
+        m--
+        n--
+    }
+    return sb.toString().reversed()
 }
 
 /**
@@ -31,7 +52,26 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
-    TODO()
+    if (list.size <= 1) return list
+    val max = Array(list.size) { 0 }
+    val trace = Array(list.size) { 0 }
+    val result = mutableListOf<Int>()
+    for (i in list.indices) {
+        max[i] = 1
+        trace[i] = -1
+        for (j in 0 until i) {
+            if (list[j] < list[i] && max[j] + 1 > max[i]) {
+                max[i]++
+                trace[i] = j
+            }
+        }
+    }
+    var maxIndex = max.indexOfFirst { it == max.maxOrNull() }
+    while (maxIndex != -1) {
+        result.add(0, list[maxIndex])
+        maxIndex = trace[maxIndex]
+    }
+    return result
 }
 
 /**
