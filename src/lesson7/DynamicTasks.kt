@@ -66,7 +66,7 @@ fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
             }
         }
     }
-    var maxIndex = max.indexOfFirst { it == max.maxOrNull() }
+    var maxIndex = max.indexOfFirst { it == max.toList().maxOrNull() }
     while (maxIndex != -1) {
         result.add(0, list[maxIndex])
         maxIndex = trace[maxIndex]

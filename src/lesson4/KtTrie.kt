@@ -77,6 +77,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         private var next: String? = null
         private val sb = StringBuilder()
         private val q: Deque<Iterator<Map.Entry<Char, Node>>> = ArrayDeque()
+        private var curr: String? = null
 
         init {
             q.push(root.children.entries.iterator())
@@ -104,7 +105,6 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             }
         }
 
-
         override fun hasNext() = next != null
 
         override fun next(): String {
@@ -115,6 +115,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         }
 
         override fun remove() {
+            if (curr != null) throw IllegalStateException()
             next = null
             size--
         }
