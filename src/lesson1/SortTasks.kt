@@ -3,7 +3,6 @@
 package lesson1
 
 import java.io.File
-import java.util.*
 
 /**
  * Сортировка времён
@@ -104,28 +103,7 @@ fun sortTimes(inputName: String, outputName: String) {
 //Ресурсоемкость - O(N)
 
 fun sortAddresses(inputName: String, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val list = File(inputName).readLines()
-    val reg = Regex("""[\wА-Яа-яЁё]+ [\wА-Яа-яЁё]+ - [\wА-Яа-яЁё-]+ \d+""")
-    val map = mutableMapOf<String, SortedSet<String>>()
-    for (i in list) {
-        if (!reg.matches(i)) throw java.lang.IllegalArgumentException()
-        val info = i.split(" - ").filter { it != "" }
-        val name = info[0]
-        val addr = info[1]
-        if (!map.containsKey(addr)) {
-            val set = sortedSetOf(name)
-            map[addr] = set
-        } else map.getValue(addr).add(name)
-    }
-    val listAddr = map.keys.sortedWith(compareBy<String> { it.split(" ")[0] }.thenBy { it.split(" ")[1].toInt() })
-    for (addr in listAddr) {
-        val names = map[addr]!!.toList().joinToString(", ")
-        val str = "$addr - $names"
-        output.write(str)
-        output.newLine()
-    }
-    output.close()
+    TODO()
 }
 
 /**
@@ -163,16 +141,7 @@ fun sortAddresses(inputName: String, outputName: String) {
 //Ресурсоемкость - O(N)
 
 fun sortTemperatures(inputName: String, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val list = File(inputName).readLines()
-    val limit = 7730
-    val listTemp = list.map { (it.toDouble() * 10).toInt() + 2730 }
-    if (listTemp.any { it !in 0..7730 }) throw IllegalArgumentException()
-    val elements = listTemp.toIntArray()
-    val out = countingSort(elements, limit)
-    val str = out.toList().joinToString("\n") { ((it - 2730).toDouble() / 10).toString() }
-    output.write(str)
-    output.close()
+    TODO()
 }
 
 /**
