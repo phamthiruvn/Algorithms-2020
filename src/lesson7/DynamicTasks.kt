@@ -15,6 +15,8 @@ package lesson7
  * Если есть несколько самых длинных общих подпоследовательностей, вернуть любую из них.
  * При сравнении подстрок, регистр символов *имеет* значение.
  */
+//Трудоемкость алгоритм - O(F.length*S.leghth)
+//Ресурсоемкость - O(F.length*S.leghth)
 fun longestCommonSubSequence(first: String, second: String): String {
     var m = first.length
     var n = second.length
@@ -51,6 +53,8 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
+//Трудоемкость алгоритм - O(N*N)
+//Ресурсоемкость - O(N)
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
     if (list.size <= 1) return list
     val max = Array(list.size) { 0 }

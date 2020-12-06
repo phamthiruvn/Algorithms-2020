@@ -90,9 +90,49 @@ fun Graph.minimumSpanningTree(): Graph {
  *
  * Эта задача может быть зачтена за пятый и шестой урок одновременно
  */
+//Трудоемкость алгоритм - O(V+E)
+//Ресурсоемкость - O(V)
 fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
-    TODO()
+    val vertices = this.vertices
+    if (vertices.isEmpty()) return setOf()
+    if (this.withCycle()) throw  IllegalArgumentException()
+    val all = mutableSetOf<Set<Graph.Vertex>>()
+    for (vertex in this.vertices) {
+        val set = mutableSetOf<Graph.Vertex>()
+        val skip = mutableSetOf<Graph.Vertex>()
+        vertices.stream().filter { next ->
+            !this.getNeighbors(vertex).contains(next) && !skip.contains(next)
+        }.forEach { next ->
+            skip.addAll(this.getNeighbors(next))
+            set.add(next)
+        }
+        all.add(set)
+    }
+    return all.maxByOrNull { it.size } ?: setOf()
 }
+
+
+//* Если на входе граф с циклами, бросить true
+//Трудоемкость алгоритм - O(V+E)
+//Ресурсоемкость - O(V)
+fun Graph.withCycle(
+    vertex: Graph.Vertex = this.vertices.first(),
+    visited: MutableMap<Graph.Vertex, Boolean> = this.vertices.map { Pair(it, false) }.toMap().toMutableMap(),
+    parent: MutableMap<Graph.Vertex, Graph.Vertex> = mutableMapOf()
+): Boolean {
+    visited[vertex] = true
+    for (child in this.getNeighbors(vertex)) {
+        if (!visited[child]!!) {
+            parent[child] = vertex
+            withCycle(child, visited, parent)
+        } else if (parent[vertex] != child) {
+            return true
+        }
+    }
+    return false
+
+}
+
 
 /**
  * Наидлиннейший простой путь.
@@ -114,8 +154,20 @@ fun Graph.largestIndependentVertexSet(): Set<Graph.Vertex> {
  *
  * Ответ: A, E, J, K, D, C, H, G, B, F, I
  */
+//Трудоемкость алгоритм - O(V+E)
+//Ресурсоемкость - O(V)
 fun Graph.longestSimplePath(): Path {
-    TODO()
+    val queue = vertices.map { Path(it) }.toMutableSet()
+    val all = mutableSetOf<Path>()
+    while (queue.isNotEmpty()) {
+        val path = queue.last()
+        queue.remove(path)
+        this.getNeighbors(path.vertices.last()).map { next -> Path(path, this, next) }.forEach { new ->
+            if (new.vertices.size != new.vertices.toSet().size) all.add(path)
+            else queue.add(new)
+        }
+    }
+    return all.maxByOrNull { it.length } ?: Path()
 }
 
 /**

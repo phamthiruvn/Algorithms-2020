@@ -9,6 +9,18 @@ abstract class AbstractDynamicTests {
         assertEquals("13", longestCommonSubSequence("123", "13"))
         assertEquals("здс", longestCommonSubSequence("здравствуй мир", "мы здесь"))
         assertEquals("emt ole", longestCommonSubSequence("nematode knowledge", "empty bottle"))
+        assertEquals("oes are e", longestCommonSubSequence("Roses are red", "Violets are blue"))
+        assertEquals(
+            "\n ts  i es ight\n" +
+                    "eae my sight", longestCommonSubSequence(
+                """
+In brightest day, in blackest night
+No evil shall escape my sight""",
+                """
+Let those who worship evil's might
+Beware my power...Green Lantern's light!"""
+            )
+        )
         val expectedLength = "e kerwelkkd r".length
         assertEquals(
             expectedLength, longestCommonSubSequence(
@@ -46,6 +58,7 @@ abstract class AbstractDynamicTests {
             listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
             longestIncreasingSubSequence(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
         )
+        assertEquals(listOf(2, 4, 9), longestIncreasingSubSequence(listOf(2, 9, 0, 4, 1, 9, 9, 9)))
         assertEquals(listOf(2, 8, 9, 12), longestIncreasingSubSequence(listOf(2, 8, 5, 9, 12, 6)))
         assertEquals(
             listOf(23, 34, 56, 87, 91, 98, 140, 349), longestIncreasingSubSequence(
@@ -53,6 +66,42 @@ abstract class AbstractDynamicTests {
                     23, 76, 34, 93, 123, 21, 56, 87, 91, 12, 45, 98, 140, 12, 5, 38, 349, 65, 94,
                     45, 76, 15, 99, 100, 88, 84, 35, 88
                 )
+            )
+        )
+        assertEquals(
+            listOf(3, 14, 15, 35, 38, 46, 79, 84, 93, 97), longestIncreasingSubSequence(
+                listOf(
+                    3,
+                    14,
+                    15,
+                    92,
+                    65,
+                    35,
+                    89,
+                    79,
+                    32,
+                    38,
+                    46,
+                    26,
+                    43,
+                    38,
+                    32,
+                    79,
+                    50,
+                    28,
+                    84,
+                    19,
+                    71,
+                    69,
+                    39,
+                    93,
+                    75,
+                    10,
+                    58,
+                    20,
+                    97,
+
+                    )
             )
         )
     }
