@@ -97,7 +97,9 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя (сложная, если поддержан и remove тоже)
      */
-    override fun iterator(): MutableIterator<T> = TableIterator()
+    override fun iterator(): MutableIterator<T> {
+        return TableIterator()
+    }
 
     inner class TableIterator internal constructor() : MutableIterator<T> {
         private var index = 0

@@ -71,7 +71,9 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      *
      * Сложная
      */
-    override fun iterator() = TrieIterator()
+    override fun iterator(): TrieIterator {
+        return TrieIterator()
+    }
 
     inner class TrieIterator internal constructor() : MutableIterator<String> {
         private var current: String? = null
