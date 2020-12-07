@@ -74,18 +74,16 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
     override fun iterator() = TrieIterator()
 
     inner class TrieIterator internal constructor() : MutableIterator<String> {
-        private var next: String? = null
+        private var current: String? = null
         private val sb = StringBuilder()
-        private val q: Deque<Iterator<Map.Entry<Char, Node>>> = ArrayDeque()
-        private var curr: String? = null
+        private val q: Deque<MutableIterator<Map.Entry<Char, Node>>> = ArrayDeque()
+        private var find = false
 
         init {
             q.push(root.children.entries.iterator())
-            findNext()
         }
 
-        private fun findNext() {
-            next = null
+        private fun findNext(): Boolean {
             var iterator = q.peek()
             var isWord = false
             while (iterator != null && !isWord) {
@@ -93,7 +91,13 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
                     val e = iterator.next()
                     val key = e.key
                     isWord = key == 0.toChar()
-                    if (isWord) next = sb.toString()
+                    if (isWord) {
+                        if (find) {
+                            current = sb.toString()
+                            find = false
+                        }
+                        return true
+                    }
                     sb.append(key)
                     val node = e.value
                     iterator = node.children.entries.iterator()
@@ -103,21 +107,21 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
                 if (sb.isNotEmpty()) sb.deleteCharAt(sb.length - 1)
                 iterator = q.peek()
             }
+            return false
         }
 
-        override fun hasNext() = next != null
+        override fun hasNext(): Boolean = findNext()
 
         override fun next(): String {
-            if (!hasNext()) throw IllegalStateException()
-            val result = next!!
-            findNext()
-            return result
+            find = true
+            if (!hasNext()) throw NoSuchElementException()
+            return current as String
         }
 
         override fun remove() {
-            if (curr != null) throw IllegalStateException()
-            next = null
-            size--
+            if (current == null) throw IllegalStateException()
+            remove(current)
+            current = null
         }
     }
 }

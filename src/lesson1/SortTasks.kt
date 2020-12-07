@@ -2,8 +2,6 @@
 
 package lesson1
 
-import java.io.File
-
 /**
  * Сортировка времён
  *
@@ -35,41 +33,8 @@ import java.io.File
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
 
-class Time(input: String) : Comparable<Time> {
-    private val numberTime: Int
-        get() {
-            val textTime = this.textTime
-            if (!Regex("""(\d\d:){2}\d\d [A,P]M""").matches(textTime)) throw IllegalArgumentException()
-            val list = textTime.split(Regex("""[: ]"""))
-            var day = 0
-            if (textTime.contains("PM")) day += 12
-            if (list.first() == "12") day -= 12
-            return (list[0].toInt() + day) * 3600 + list[1].toInt() * 60 + list[2].toInt()
-        }
-
-    private val textTime = input
-
-    override fun compareTo(other: Time): Int {
-        return this.numberTime.compareTo(other.numberTime)
-    }
-
-    override fun toString(): String {
-        return textTime
-    }
-}
-
-//Трудоемкость алгоритма - O(N^2)
-//Ресурсоемкость - O(N)
-
 fun sortTimes(inputName: String, outputName: String) {
-    val output = File(outputName).outputStream().bufferedWriter()
-    val list = File(inputName).readLines().map { Time(it) }.toMutableList()
-    insertionSort(list)
-    for (time in list) {
-        output.write(time.toString())
-        output.newLine()
-    }
-    output.close()
+    TODO()
 }
 
 /**
