@@ -3,6 +3,7 @@ package lesson5
 /**
  * Множество(таблица) с открытой адресацией на 2^bits элементов без возможности роста.
  */
+@Suppress("UNCHECKED_CAST")
 class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T>() {
     init {
         require(bits in 2..31)
@@ -77,6 +78,8 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя
      */
+    //Трудоемкость алгоритм - O(N) - N-capacity
+    //Ресурсоемкость - O(1)
     override fun remove(element: T) = if (contains(element) && currentIndex != null) {
         storage[currentIndex!!] = null
         size--
@@ -97,12 +100,13 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
     override fun iterator(): MutableIterator<T> = TableIterator()
 
     inner class TableIterator internal constructor() : MutableIterator<T> {
-
         private var index = 0
         private var current: T? = null
         private var end = false
         private var find = false
 
+        //Трудоемкость алгоритм - O(N) - N-capacity
+        //Ресурсоемкость - O(1)
         override fun hasNext(): Boolean {
             if (end && index == 0) return false
             while (storage[index] == null) {
@@ -113,22 +117,26 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
                 }
             }
             if (find) {
+                find = false
                 current = storage[index] as T
                 index = (index + 1) % capacity
-                find = false
             }
             return true
         }
 
+        //Трудоемкость алгоритм = Трудоемкость hasNext()
+        //Ресурсоемкость - O(1)
         override fun next(): T {
             find = true
             if (!hasNext()) throw NoSuchElementException()
             return current as T
         }
 
+        //Трудоемкость алгоритм - O(1)
+        //Ресурсоемкость - O(1)
         override fun remove() {
-            if (current == null) throw IllegalStateException()
-            remove(current)
+            check(current != null)
+            check(remove(current))
             current = null
         }
     }

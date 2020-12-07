@@ -8,7 +8,7 @@ import java.util.*
  */
 class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
 
-    private class Node {
+    class Node {
         val children: MutableMap<Char, Node> = linkedMapOf()
     }
 
@@ -75,53 +75,44 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
 
     inner class TrieIterator internal constructor() : MutableIterator<String> {
         private var current: String? = null
-        private val sb = StringBuilder()
-        private val q: Deque<MutableIterator<Map.Entry<Char, Node>>> = ArrayDeque()
-        private var find = false
+        private val queue = LinkedList<String>()
 
         init {
-            q.push(root.children.entries.iterator())
+            toQueue(root, 0, StringBuilder())
         }
 
-        private fun findNext(): Boolean {
-            var iterator = q.peek()
-            var isWord = false
-            while (iterator != null && !isWord) {
-                while (iterator.hasNext() && !isWord) {
-                    val e = iterator.next()
-                    val key = e.key
-                    isWord = key == 0.toChar()
-                    if (isWord) {
-                        if (find) {
-                            current = sb.toString()
-                            find = false
-                        }
-                        return true
-                    }
-                    sb.append(key)
-                    val node = e.value
-                    iterator = node.children.entries.iterator()
-                    q.push(iterator)
-                }
-                q.pop()
-                if (sb.isNotEmpty()) sb.deleteCharAt(sb.length - 1)
-                iterator = q.peek()
+        //Трудоемкость алгоритм - O(Ls) - Ls-total length of the words
+        //Ресурсоемкость - O(L) - L-length of the longest word
+        private fun toQueue(node: Node, level: Int, sb: StringBuilder) {
+            val children = node.children
+            val characters = children.keys
+            for (character in characters) {
+                if (character == 0.toChar()) queue.add(sb.toString())
+                sb.insert(level, character)
+                children[character]?.let { toQueue(it, level + 1, sb) }
+                sb.deleteCharAt(level)
             }
-            return false
         }
 
-        override fun hasNext(): Boolean = findNext()
+        //Трудоемкость алгоритм - O(1)
+        //Ресурсоемкость - O(1)
+        override fun hasNext(): Boolean = queue.peek() != null
 
+        //Трудоемкость алгоритм - O(1)
+        //Ресурсоемкость - O(1)
         override fun next(): String {
-            find = true
             if (!hasNext()) throw NoSuchElementException()
+            current = queue.remove()
             return current as String
         }
 
+        //Трудоемкость алгоритм - O(1)
+        //Ресурсоемкость - O(1)
         override fun remove() {
             if (current == null) throw IllegalStateException()
-            remove(current)
+            check(remove(current))
             current = null
         }
     }
+
 }
