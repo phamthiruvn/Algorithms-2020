@@ -80,9 +80,6 @@ fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
  * но приветствуется попытка решить её самостоятельно.
  */
 
-//Трудоемкость алгоритм - O(N)
-//Ресурсоемкость - O(1)
-
 fun josephTask(menNumber: Int, choiceInterval: Int): Int {
     TODO()
 
@@ -99,9 +96,6 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
  */
-
-//Трудоемкость алгоритм - O(M*N)
-//Ресурсоемкость - O(N*M)
 
 fun longestCommonSubstring(first: String, second: String): String {
     TODO()
