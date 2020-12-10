@@ -112,6 +112,12 @@ abstract class AbstractTrieTest {
             }
             println("All clear!")
         }
+        val test = KtTrie()
+        test.add("1999")
+        val iterator = test.iterator()
+        assertEquals("1999", iterator.next())
+        assertFalse { iterator.hasNext() }
+        println("New test clears!")
     }
 
     protected fun doIteratorRemoveTest() {
@@ -173,6 +179,13 @@ abstract class AbstractTrieTest {
             }
             println("All clear!")
         }
+        val test = KtTrie()
+        test.add("1999")
+        val iterator = test.iterator()
+        assertEquals("1999", iterator.next())
+        iterator.remove()
+        assertFalse { iterator.hasNext() }
+        println("New test clears!")
     }
 
 }

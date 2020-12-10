@@ -36,6 +36,7 @@ abstract class AbstractOpenAddressingSetTest {
                     smallSet.add(random.nextInt())
                 }
             }
+
         }
     }
 
@@ -75,6 +76,12 @@ abstract class AbstractOpenAddressingSetTest {
                     "The size of the set is not as expected."
                 )
             }
+            val test = KtOpenAddressingSet<Any>(3)
+            test.add(29)
+            assertTrue { test.remove(29) }
+            assertFalse { test.remove(29) }
+            assertFalse { test.remove(4) }
+            println("New test clears!")
         }
     }
 
@@ -118,6 +125,12 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+        val test = KtOpenAddressingSet<Any>(3)
+        test.add(1999)
+        val iterator = test.iterator()
+        assertEquals(1999, iterator.next())
+        assertFailsWith<NoSuchElementException> { iterator.next() }
+        println("New test clears!")
     }
 
     protected fun doIteratorRemoveTest() {
@@ -175,5 +188,12 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+        val test = KtOpenAddressingSet<Any>(3)
+        test.add(1999)
+        val iterator = test.iterator()
+        assertEquals(1999, iterator.next())
+        iterator.remove()
+        assertFalse { iterator.hasNext() }
+        println("New test clears!")
     }
 }
